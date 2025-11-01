@@ -1,51 +1,38 @@
-import { useState, useEffect } from 'react';
-import { getAllSocios } from '../services/SocioService';
+import { useState } from "react";
 
-function SocioForm({ onSubmit, socioEditado }) {
-  const [formData, setFormData] = useState({
-    dni: '',
-    nombre: '',
-    apellido: '',
-    direccion: '',
-    telefono: '',
-    correoElectronico: '',
-    fechaNacimiento: ''
+export default function SocioForm({ onSubmit }) {
+  const [socio, setSocio] = useState({
+    nombre: "",
+    apellido: "",
+    dni: "",
+    telefono: "",
+    direccion: "",
+    correoElectronico: "",
+    fechaNacimiento: "",
   });
 
-  useEffect(() => {
-    if (socioEditado) setFormData(socioEditado);
-  }, [socioEditado]);
-
-  const handleChange = e => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
+  const handleChange = (e) => {
+    setSocio({ ...socio, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = e => {
+  const handleSubmit = (e) => {
     e.preventDefault();
-    onSubmit(formData);
-    setFormData({
-      dni: '',
-      nombre: '',
-      apellido: '',
-      direccion: '',
-      telefono: '',
-      correoElectronico: '',
-      fechaNacimiento: ''
-    });
+    onSubmit(socio); // ✅ Solo enviamos el socio al padre
   };
 
   return (
-    <form className="socio-form" onSubmit={handleSubmit}>
-      <input className="input" name="dni" placeholder="DNI" value={formData.dni} onChange={handleChange} />
-      <input className="input" name="nombre" placeholder="Nombre" value={formData.nombre} onChange={handleChange} />
-      <input className="input" name="apellido" placeholder="Apellido" value={formData.apellido} onChange={handleChange} />
-      <input className="input" name="direccion" placeholder="Dirección" value={formData.direccion} onChange={handleChange} />
-      <input className="input" name="telefono" placeholder="Teléfono" value={formData.telefono} onChange={handleChange} />
-      <input className="input" name="correoElectronico" placeholder="Email" value={formData.correoElectronico} onChange={handleChange} />
-      <input className="input" name="fechaNacimiento" type="date" value={formData.fechaNacimiento} onChange={handleChange} />
-      <button className="btn" type="submit">{socioEditado ? 'Actualizar' : 'Registrar'}</button>
+    <form onSubmit={handleSubmit} className="socio-form">
+      <h3>Registrar socio</h3>
+
+      <input type="text" name="nombre" placeholder="Nombre" value={socio.nombre} onChange={handleChange} required />
+      <input type="text" name="apellido" placeholder="Apellido" value={socio.apellido} onChange={handleChange} required />
+      <input type="text" name="dni" placeholder="DNI" value={socio.dni} onChange={handleChange} required />
+      <input type="text" name="telefono" placeholder="Teléfono" value={socio.telefono} onChange={handleChange} />
+      <input type="text" name="direccion" placeholder="Dirección" value={socio.direccion} onChange={handleChange} />
+      <input type="email" name="correoElectronico" placeholder="Correo electrónico" value={socio.correoElectronico} onChange={handleChange} required />
+      <input type="date" name="fechaNacimiento" value={socio.fechaNacimiento} onChange={handleChange} required />
+
+      <button type="submit">Continuar al pago</button>
     </form>
   );
 }
-
-export default SocioForm;
